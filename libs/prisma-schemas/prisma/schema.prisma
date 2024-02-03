@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EncryptionAlgs {
+  ARGON2ID_CHACHA20POLY1305
+}
+
+enum Games {
+  TicTacToe
+}
+
+model User {
+  id         Int            @id @default(autoincrement())
+  username   String         @unique
+  mail       String
+  password   String
+  encryption EncryptionAlgs
+  GameELO    GameELO[]
+}
+
+model GameELO {
+  id     Int   @id @default(autoincrement())
+  game   Games
+  value  Int
+  user   User  @relation(fields: [userId], references: [id])
+  userId Int
+}

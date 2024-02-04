@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: 'authorization',
+    displayName: { name: 'authorization', color: 'yellow' },
     preset: '../../jest.preset.js',
     testEnvironment: 'node',
     transform: {

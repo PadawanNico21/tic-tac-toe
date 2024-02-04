@@ -17,6 +17,9 @@ export class GameELOModel {
     @IsInstance(UserModel)
     user: UserModel
 
+    @IsInt()
+    userId: number
+
     constructor(data: any) {
         Object.assign(this, data)
     }

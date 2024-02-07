@@ -2,7 +2,7 @@ import { IsArray, IsEmail, IsInt, IsString } from 'class-validator'
 import { GameELOModel } from './game-elo.model'
 import { EncryptionAlgs } from '@tictactoe/prisma-schemas'
 
-export const ecnryptionAlgs: {
+export const encryptionAlgs: {
     algs: EncryptionAlgs[]
     prefered: EncryptionAlgs
 } = {

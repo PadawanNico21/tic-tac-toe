@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Games, PrismaService } from '@tictactoe/prisma-schemas'
-import { UserModel, ecnryptionAlgs } from './models/user.model'
+import { UserModel, encryptionAlgs } from './models/user.model'
 import { games } from './models/game-elo.model'
 
 @Injectable()
@@ -40,7 +40,7 @@ export class UsersService {
 
     async createUser(user: Omit<UserModel, 'id' | 'GameELO' | 'encryption'>) {
         const createdUser = await this.prisma.user.create({
-            data: { ...user, encryption: ecnryptionAlgs.prefered },
+            data: { ...user, encryption: encryptionAlgs.prefered },
         })
 
         await this.prisma.gameELO.createMany({

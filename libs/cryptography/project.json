@@ -1,0 +1,8 @@
+{
+    "name": "cryptography",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/cryptography/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

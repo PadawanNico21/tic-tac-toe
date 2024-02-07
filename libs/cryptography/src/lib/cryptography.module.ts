@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common'
+import { CryptographyFactory } from './cryptography.factory'
 
 @Module({
     controllers: [],
-    providers: [],
-    exports: [],
+    providers: [CryptographyFactory],
+    exports: [CryptographyFactory],
 })
 export class CryptographyModule {}

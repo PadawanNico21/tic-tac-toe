@@ -12,6 +12,8 @@ export class DragonflyService extends Redis implements OnModuleInit {
         super({
             port: config.port,
             host: config.host,
+            username: config.username,
+            password: config.password,
             lazyConnect: true,
         })
     }

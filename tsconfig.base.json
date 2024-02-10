@@ -15,6 +15,7 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
+            "@tictactoe/authentication": ["libs/authentication/src/index.ts"],
             "@tictactoe/authorization": ["libs/authorization/src/index.ts"],
             "@tictactoe/backend-configuration": [
                 "libs/backend-configuration/src/index.ts"

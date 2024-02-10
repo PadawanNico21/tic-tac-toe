@@ -1,0 +1,8 @@
+{
+    "name": "dragonfly",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/dragonfly/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

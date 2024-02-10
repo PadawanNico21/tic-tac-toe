@@ -20,6 +20,7 @@
                 "libs/backend-configuration/src/index.ts"
             ],
             "@tictactoe/cryptography": ["libs/cryptography/src/index.ts"],
+            "@tictactoe/dragonfly": ["libs/dragonfly/src/index.ts"],
             "@tictactoe/models": ["libs/models/src/index.ts"],
             "@tictactoe/prisma-schemas": ["libs/prisma-schemas/src/index.ts"]
         }

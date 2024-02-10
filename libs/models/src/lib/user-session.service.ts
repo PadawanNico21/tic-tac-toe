@@ -3,6 +3,7 @@ import { DragonflyService } from '@tictactoe/dragonfly'
 import { randomBytes } from 'crypto'
 import { UserSessionModel } from './models/user-session.model'
 import { ConfigService } from '@nestjs/config'
+import { validateOrReject } from 'class-validator'
 
 @Injectable()
 export class UserSessionService {
@@ -38,9 +39,16 @@ export class UserSessionService {
 
         const key = `user-session:${serializedToken}`
 
-        await this.dragonflyService.hmset(key, userSession)
-        await this.dragonflyService.expireat(key, expirationDate)
+        await this.dragonflyService.setex(key, ttl, JSON.stringify(userSession))
 
         return userSession
+    }
+
+    async getSession(token: string): Promise<UserSessionModel> {
+        const entry = JSON.parse(await this.dragonflyService.get(token))
+        const session = new UserSessionModel(entry)
+
+        await validateOrReject(session)
+        return session
     }
 }

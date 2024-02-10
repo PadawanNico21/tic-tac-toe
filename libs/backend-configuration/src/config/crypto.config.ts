@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config'
 
-export default registerAs('crypto', () => ({
+export const cryptoConfig = registerAs('crypto', () => ({
     secret: process.env['CRYPTO_SECRET'],
 }))

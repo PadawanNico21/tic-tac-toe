@@ -1,0 +1,8 @@
+{
+    "name": "backend-configuration",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/backend-configuration/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

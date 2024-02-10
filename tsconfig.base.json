@@ -16,6 +16,9 @@
         "baseUrl": ".",
         "paths": {
             "@tictactoe/authorization": ["libs/authorization/src/index.ts"],
+            "@tictactoe/backend-configuration": [
+                "libs/backend-configuration/src/index.ts"
+            ],
             "@tictactoe/cryptography": ["libs/cryptography/src/index.ts"],
             "@tictactoe/models": ["libs/models/src/index.ts"],
             "@tictactoe/prisma-schemas": ["libs/prisma-schemas/src/index.ts"]

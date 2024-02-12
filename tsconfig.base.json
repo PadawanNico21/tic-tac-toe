@@ -22,6 +22,7 @@
             ],
             "@tictactoe/cryptography": ["libs/cryptography/src/index.ts"],
             "@tictactoe/dragonfly": ["libs/dragonfly/src/index.ts"],
+            "@tictactoe/game-backbone": ["libs/game-backbone/src/index.ts"],
             "@tictactoe/matchmaking": ["libs/matchmaking/src/index.ts"],
             "@tictactoe/models": ["libs/models/src/index.ts"],
             "@tictactoe/prisma-schemas": ["libs/prisma-schemas/src/index.ts"]

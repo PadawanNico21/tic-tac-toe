@@ -1,0 +1,8 @@
+{
+    "name": "game-backbone",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/game-backbone/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

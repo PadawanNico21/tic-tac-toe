@@ -77,7 +77,19 @@ export class Matchmaker {
             (k) => this.dragonflyService.incr(k)
         )
 
-        if (playerPos > this.options.maxPlayers) return false
+        if (playerPos > this.options.maxPlayers) {
+            await this.dragonflyService.srem(
+                this.dragonflyRoutes.rooms(this.options.name),
+                `${room.id},${room.averageELO}`
+            )
+            await this.dragonflyService.del(
+                this.dragonflyRoutes.roomPlayerCount(this.options.name, room.id)
+            )
+            await this.dragonflyService.del(
+                this.dragonflyRoutes.roomPlayers(this.options.name, room.id)
+            )
+            return false
+        }
 
         await this.runAndExpire(
             this.dragonflyRoutes.roomPlayers(this.options.name, room.id),

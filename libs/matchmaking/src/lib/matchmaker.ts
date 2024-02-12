@@ -18,6 +18,7 @@ export interface MatchemakerRoom {
     id: string
     averageELO: number
     owner: boolean
+    playerPos?: number
 }
 
 export class Matchmaker {
@@ -91,6 +92,8 @@ export class Matchmaker {
             return false
         }
 
+        room.playerPos = playerPos
+
         await this.runAndExpire(
             this.dragonflyRoutes.roomPlayers(this.options.name, room.id),
             (k) => this.dragonflyService.sadd(k, `${userId},${userElo}`)
@@ -150,6 +153,7 @@ export class Matchmaker {
             averageELO: userElo,
             id: roomId,
             owner: true,
+            playerPos: 1,
         }
     }
 

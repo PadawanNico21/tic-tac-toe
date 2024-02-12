@@ -25,11 +25,20 @@ export class DragonflyService
             lazyConnect: true,
         })
     }
+
     async onModuleDestroy() {
         await this.quit()
     }
 
     async onModuleInit() {
         await this.connect()
+    }
+
+    async saddex(
+        key: string | Buffer,
+        ttl: number,
+        ...keys: (string | Buffer)[]
+    ): Promise<unknown> {
+        return this.call('saddex', key, ttl, ...keys)
     }
 }

@@ -17,4 +17,8 @@ export class DragonflyRoutes {
     roomPlayers(game: string, roomId: string) {
         return `${this.room(game, roomId)}:p`
     }
+
+    roomConnection(game: string, roomId: string) {
+        return `c:${this.room(game, roomId)}`
+    }
 }

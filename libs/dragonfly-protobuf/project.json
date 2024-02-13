@@ -1,0 +1,8 @@
+{
+    "name": "dragonfly-protobuf",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/dragonfly-protobuf/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": []
+}

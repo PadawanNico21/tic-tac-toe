@@ -1,5 +1,9 @@
 import { DragonflyRoutes, DragonflyService } from '@tictactoe/dragonfly'
 import { randomBytes } from 'crypto'
+import {
+    RoomIdAverageEloTupleProto,
+    UserEloTupleProto,
+} from '@tictactoe/dragonfly-protobuf'
 
 export interface MatchmakerOptions {
     name: string
@@ -43,27 +47,31 @@ export class Matchmaker {
 
     async findBestOpponents(elo: number): Promise<MatchemakerRoom> {
         const rooms = (
-            await this.dragonflyService.smembers(
+            await this.dragonflyService.smembersBuffer(
                 this.dragonflyRoutes.rooms(this.options.name)
             )
-        ).map(this.parseTupleRoom)
+        ).map(RoomIdAverageEloTupleProto.decode<RoomIdAverageEloTupleProto>)
 
         let eloDelta = this.options.maxELODelta
-        let bestRoom: [string, number] = ['', -1]
+        const bestRoom: { roomId: string; averageElo: number } = {
+            roomId: '',
+            averageElo: 0,
+        }
 
-        for (const [roomId, averageElo] of rooms) {
+        for (const { roomId, averageElo } of rooms) {
             const currentEloDelta = Math.abs(averageElo - elo)
             if (currentEloDelta < eloDelta) {
                 eloDelta = currentEloDelta
-                bestRoom = [roomId, averageElo]
+                bestRoom.roomId = roomId
+                bestRoom.averageElo = averageElo
             }
         }
 
-        if (!bestRoom[0]) throw new Error('No room found')
+        if (!bestRoom.roomId) throw new Error('No room found')
 
         return {
-            id: bestRoom[0],
-            averageELO: bestRoom[1],
+            id: bestRoom.roomId,
+            averageELO: bestRoom.averageElo,
             owner: false,
         }
     }
@@ -78,10 +86,19 @@ export class Matchmaker {
             (k) => this.dragonflyService.incr(k)
         )
 
+        const currentRoom = new RoomIdAverageEloTupleProto({
+            roomId: room.id,
+            averageElo: room.averageELO,
+        })
+
+        const currentRoomBuffer = Buffer.from(
+            RoomIdAverageEloTupleProto.encode(currentRoom).finish()
+        )
+
         if (playerPos > this.options.maxPlayers) {
             await this.dragonflyService.srem(
                 this.dragonflyRoutes.rooms(this.options.name),
-                `${room.id},${room.averageELO}`
+                currentRoomBuffer
             )
             await this.dragonflyService.del(
                 this.dragonflyRoutes.roomPlayerCount(this.options.name, room.id)
@@ -94,28 +111,39 @@ export class Matchmaker {
 
         room.playerPos = playerPos
 
+        const user = new UserEloTupleProto({ userId, elo: userElo })
+
         await this.runAndExpire(
             this.dragonflyRoutes.roomPlayers(this.options.name, room.id),
-            (k) => this.dragonflyService.sadd(k, `${userId},${userElo}`)
+            (k) =>
+                this.dragonflyService.sadd(
+                    k,
+                    Buffer.from(UserEloTupleProto.encode(user).finish())
+                )
         )
 
         const players = (
-            await this.dragonflyService.smembers(
+            await this.dragonflyService.smembersBuffer(
                 this.dragonflyRoutes.roomPlayers(this.options.name, room.id)
             )
-        ).map(this.parseTuplePlayer)
+        ).map(UserEloTupleProto.decode<UserEloTupleProto>)
 
         const newAverage =
-            players.reduce((acc, [_, elo]) => acc + elo, 0) / players.length
+            players.reduce((acc, { elo }) => acc + elo, 0) / players.length
+
+        const newRoom = new RoomIdAverageEloTupleProto({
+            roomId: room.id,
+            averageElo: newAverage,
+        })
 
         await this.dragonflyService.srem(
             this.dragonflyRoutes.rooms(this.options.name),
-            `${room.id},${room.averageELO}`
+            currentRoomBuffer
         )
         await this.dragonflyService.saddex(
             this.dragonflyRoutes.rooms(this.options.name),
             this.options.roomTTL,
-            `${room.id},${newAverage}`
+            Buffer.from(RoomIdAverageEloTupleProto.encode(newRoom).finish())
         )
 
         return true
@@ -138,15 +166,26 @@ export class Matchmaker {
             (k) => this.dragonflyService.incr(k)
         )
 
+        const user = new UserEloTupleProto({ userId, elo: userElo })
+
         await this.runAndExpire(
             this.dragonflyRoutes.roomPlayers(this.options.name, roomId),
-            (k) => this.dragonflyService.sadd(k, `${userId},${userElo}`)
+            (k) =>
+                this.dragonflyService.sadd(
+                    k,
+                    Buffer.from(UserEloTupleProto.encode(user).finish())
+                )
         )
+
+        const room = new RoomIdAverageEloTupleProto({
+            roomId,
+            averageElo: userElo,
+        })
 
         await this.dragonflyService.saddex(
             this.dragonflyRoutes.rooms(this.options.name),
             this.options.roomTTL,
-            `${roomId},${userElo}`
+            Buffer.from(RoomIdAverageEloTupleProto.encode(room).finish())
         )
 
         return {
@@ -165,21 +204,5 @@ export class Matchmaker {
         const result = await command(key)
         await this.dragonflyService.expire(key, ttl)
         return result
-    }
-
-    private parseTupleRoom(tuple: string): [string, number] {
-        const parsedTuple = tuple.split(',', 2)
-
-        if (parsedTuple.length !== 2) throw new Error('Invalid tuple')
-
-        return [parsedTuple[0], parseInt(parsedTuple[1], 10)]
-    }
-
-    private parseTuplePlayer(tuple: string): [number, number] {
-        const parsedTuple = tuple.split(',', 2).map((val) => parseInt(val, 10))
-
-        if (parsedTuple.length !== 2) throw new Error('Invalid tuple')
-
-        return parsedTuple as [number, number]
     }
 }

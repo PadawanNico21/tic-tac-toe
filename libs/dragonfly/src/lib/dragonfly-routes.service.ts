@@ -21,4 +21,8 @@ export class DragonflyRoutes {
     roomConnection(game: string, roomId: string) {
         return `c:${this.room(game, roomId)}`
     }
+
+    roomConnectionOrder(game: string, roomId: string) {
+        return `c:${this.room(game, roomId)}:o`
+    }
 }

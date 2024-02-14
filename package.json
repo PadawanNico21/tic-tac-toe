@@ -32,7 +32,8 @@
     "protobufjs": "^7.2.6",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "ws": "^8.16.0"
   },
   "devDependencies": {
     "@nestjs/schematics": "^10.0.1",
@@ -51,6 +52,7 @@
     "@swc/helpers": "~0.5.2",
     "@types/jest": "^29.4.0",
     "@types/node": "~18.16.9",
+    "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "eslint": "~8.48.0",

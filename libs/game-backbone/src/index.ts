@@ -1,2 +1,5 @@
-export * from './lib/game-backbone.service'
 export * from './lib/game-backbone.module'
+export * from './lib/game-sync.service'
+export * from './lib/determinate-order.service'
+export * from './lib/game-state-packet-serializer'
+export * from './lib/game-state'

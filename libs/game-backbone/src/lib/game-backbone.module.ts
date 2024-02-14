@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common'
-import { GameBackboneService } from './game-backbone.service'
+import { DragonflyModule } from '@tictactoe/dragonfly'
+import { GameSyncService } from './game-sync.service'
+import { DeterminateOrderService } from './determinate-order.service'
 
 @Module({
     controllers: [],
-    providers: [GameBackboneService],
-    exports: [GameBackboneService],
+    imports: [DragonflyModule],
+    providers: [GameSyncService, DeterminateOrderService],
+    exports: [GameSyncService, DeterminateOrderService],
 })
 export class GameBackboneModule {}

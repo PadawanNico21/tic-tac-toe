@@ -45,14 +45,14 @@ export class DragonflyService
     /**
      * @deprecated ❗ Ne fonctionnera pas
      */
-    override subscribe(...args: any[]): Promise<any> {
-        throw new Error('The DragonflyService can only publish messages')
+    override subscribe(..._: any[]): Promise<any> {
+        throw new Error('DragonflyService can only publish messages')
     }
 
     /**
      * @deprecated ❗ Ne fonctionnera pas
      */
-    override unsubscribe(...args: any[]): Promise<any> {
-        throw new Error('The DragonflyService can only publish messages')
+    override unsubscribe(..._: any[]): Promise<any> {
+        throw new Error('DragonflyService can only publish messages')
     }
 }

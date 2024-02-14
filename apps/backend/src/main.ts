@@ -2,6 +2,7 @@ import { Logger, ValidationPipe, VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app/app.module'
 import { instrumentate } from '@tictactoe/otel-instrumentations'
+import { WsAdapter } from './app/WsAdapter'
 
 instrumentate('tictactoe-backend')
 
@@ -11,6 +12,7 @@ async function bootstrap() {
 
     app.enableVersioning({ defaultVersion, type: VersioningType.URI })
     app.useGlobalPipes(new ValidationPipe())
+    app.useWebSocketAdapter(new WsAdapter(app))
 
     const port = process.env.PORT ?? 3000
     await app.listen(port, '0.0.0.0')

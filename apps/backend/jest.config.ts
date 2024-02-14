@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: 'backend',
+    displayName: { name: 'backend', color: 'yellow' },
     preset: '../../jest.preset.js',
     testEnvironment: 'node',
     transform: {

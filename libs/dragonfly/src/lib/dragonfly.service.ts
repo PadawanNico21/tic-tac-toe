@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { ConfigType } from '@nestjs/config'
 import { dragonflyConfig } from '@tictactoe/backend-configuration'
-import { Redis } from 'ioredis'
+import { Callback, Redis } from 'ioredis'
 
 @Injectable()
 export class DragonflyService
@@ -40,5 +40,19 @@ export class DragonflyService
         ...keys: (string | Buffer)[]
     ): Promise<unknown> {
         return this.call('saddex', key, ttl, ...keys)
+    }
+
+    /**
+     * @deprecated ❗ Ne fonctionnera pas
+     */
+    override subscribe(...args: any[]): Promise<any> {
+        throw new Error('The DragonflyService can only publish messages')
+    }
+
+    /**
+     * @deprecated ❗ Ne fonctionnera pas
+     */
+    override unsubscribe(...args: any[]): Promise<any> {
+        throw new Error('The DragonflyService can only publish messages')
     }
 }

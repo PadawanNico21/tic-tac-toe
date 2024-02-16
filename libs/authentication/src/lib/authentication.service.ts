@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { CryptographyFactory } from '@tictactoe/cryptography'
 import { UserSessionModel, UserSessionService } from '@tictactoe/models'
 import { PrismaService } from '@tictactoe/prisma-schemas'
@@ -21,12 +21,12 @@ export class AuthenticationService {
             select: { id: true, password: true, encryption: true },
         })
 
-        if (!user) throw new Error('Invalid credentials')
+        if (!user) throw new UnauthorizedException('Invalid credentials')
 
         const crypto = this.cryptoFactory.createFromEnum(user.encryption)
 
         if (!(await crypto.verifyHash(user.password, password)))
-            throw new Error('Invalid credentials')
+            throw new UnauthorizedException('Invalid credentials')
 
         return this.userSessioService.createSession(
             user.id,

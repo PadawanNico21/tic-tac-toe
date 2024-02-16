@@ -25,4 +25,8 @@ export class DragonflyRoutes {
     roomConnectionOrder(game: string, roomId: string) {
         return `c:${this.room(game, roomId)}:o`
     }
+
+    session(token: string) {
+        return `user-session:${token}`
+    }
 }
